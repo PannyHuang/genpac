@@ -191,3 +191,39 @@ genpac --format=wingy --template=/sample/wingy-tpl.yaml
 [pypi-license]:     https://img.shields.io/pypi/l/genpac.svg?style=flat
 [travis-ci-status]: https://img.shields.io/travis/JinnLynn/genpac.svg?style=flat
 [dev-badge]:        https://img.shields.io/badge/dev-2.0b2-orange.svg?style=flat
+
+
+### 实践
+
+```
+# 创建项目目录
+mkdir mproxy && cd mproxy
+
+# 初始化项目
+genpac --init .
+
+# 编辑配置文件（主要的配置）
+vi config.ini
+- gfwlist-proxy = PROXY 127.0.0.1:4780
+- gfwlist-update-local = true
+- user-rule-from = user-rules.txt
+- output = proxy.pac
+- pac-proxy = PROXY 127.0.0.1:4780
+- pac-compress = true
+- pac-precise = false
+
+# 生成.pac文件
+genpac --format=pac --config-from=config.ini
+
+# 部署pac服务
+# 移动 proxy.pac 文件到 httpd 应用目录
+mv proxy.pac /usr/local/var/www
+
+# 启动 or 重启 httpd 服务
+brew service start httpd
+brew services restart httpd
+
+# 设置Wi-Fi代理模式为自动配置代理
+http://127.0.0.1:8080/proxy.pac
+
+```
